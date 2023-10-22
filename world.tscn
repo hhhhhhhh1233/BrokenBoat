@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ctqjn8vw0rrtv"]
+[gd_scene load_steps=8 format=3 uid="uid://ctqjn8vw0rrtv"]
 
-[ext_resource type="PackedScene" uid="uid://dwnobneabb4us" path="res://player.tscn" id="1_22huc"]
+[ext_resource type="Script" path="res://PlayerCamera.gd" id="2_c2sk6"]
+[ext_resource type="PackedScene" uid="uid://clqi06tcqv00" path="res://boat.tscn" id="3_r1y8n"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_sr70b"]
 radius = 30.0
@@ -25,12 +26,9 @@ albedo_color = Color(0, 0.894118, 0.227451, 1)
 transform = Transform3D(-0.268407, 0.663741, -0.698144, -0.571727, 0.473529, 0.669999, 0.775297, 0.578981, 0.25238, 0, 0, 0)
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("1_22huc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.2579, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Player"]
-transform = Transform3D(-0.959585, 0.281421, -7.47034e-09, 0.174507, 0.595033, 0.784528, 0.220782, 0.75282, -0.620094, -0.467382, 11.58, -7.60499)
+[node name="PlayerCamera" type="Camera3D" parent="."]
 size = 30.0
+script = ExtResource("2_c2sk6")
 
 [node name="Planet" type="Area3D" parent="."]
 collision_layer = 2
@@ -127,3 +125,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8532, -7.04597, -27.5901)
 mesh = SubResource("SphereMesh_sr27d")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="Boat" parent="." instance=ExtResource("3_r1y8n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.6926, 0)
+mass = 10.0
+
+[node name="CameraTarget" type="Node3D" parent="Boat"]
+transform = Transform3D(-0.959585, 0.28142, -2.41474e-07, 0.174507, 0.595033, 0.784527, 0.220782, 0.75282, -0.620094, -0.467382, 11.58, -7.60499)
