@@ -14,7 +14,10 @@ albedo_color = Color(0.4, 1, 1, 1)
 [node name="Boat" type="RigidBody3D"]
 gravity_scale = 0.0
 linear_damp = 1.0
+angular_damp = 1.0
 script = ExtResource("1_p8f5n")
+floatingPower = 150
+speed = 100
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_qheah")
