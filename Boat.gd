@@ -12,20 +12,39 @@ var buoys
 @export var planetRadius = 30
 @export var speed = 60
 
+enum ShipState 
+{
+	STEERING,
+	SHOOTING
+}
+
 func _ready():
 	planet = get_node("../Planet")
 	buoys = $Buoys.get_children()
 
+var shipState = ShipState.STEERING
+
 func _physics_process(delta):
 	var planetNormal = (global_position - planet.global_position).normalized()
 	
-	var accel = Input.get_action_strength("action")
-	if accel:
-		apply_force(transform.basis.z * speed * accel)
+	if Input.is_action_just_pressed("swap"):
+		if shipState == ShipState.STEERING:
+			shipState = ShipState.SHOOTING
+		else:
+			shipState = ShipState.STEERING
+	
+	if shipState == ShipState.STEERING:
+		var accel = Input.get_action_strength("action")
+		if accel:
+			apply_force(transform.basis.z * speed * accel)
+			var turn_dir = Input.get_axis("turn_right", "turn_left")
+			global_rotate(planetNormal, turn_dir * delta)
+		else:
+			apply_force(-linear_velocity * 0.5)
+
+	if shipState == ShipState.SHOOTING:
 		var turn_dir = Input.get_axis("turn_right", "turn_left")
-		global_rotate(planetNormal, turn_dir * delta)
-	else:
-		apply_force(-linear_velocity * 0.5)
+		$Cannon.global_rotate(planetNormal, turn_dir * delta)
 
 	for buoy in buoys:
 		# Gravity that tugs each floater point towards the gravitational center

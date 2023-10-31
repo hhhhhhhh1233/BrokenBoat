@@ -1,17 +1,24 @@
 extends Camera3D
 
-var cameraTarget
+var currentTarget
+var boat
+var steeringCameraTarget
+var shootingCameraTarget
 
 func _ready():
-	cameraTarget = get_node("../Boat/CameraTarget")
-	position = cameraTarget.global_position
-	rotation = cameraTarget.global_rotation
+	steeringCameraTarget = get_node("../Boat/CameraTarget")
+	boat = get_node("../Boat")
+	shootingCameraTarget = get_node("../Boat/Cannon/CameraTarget")
+	
+	position = steeringCameraTarget.global_position
+	rotation = steeringCameraTarget.global_rotation
 
 func _process(_delta):
-	if cameraTarget:
-		position = lerp(position, cameraTarget.global_position, 0.1)
-	
-		var curr = Quaternion(global_transform.basis)
-		var target = Quaternion(cameraTarget.global_transform.basis)
-		transform.basis = Basis(curr.slerp(target,0.1)) 
+	if boat.shipState == boat.ShipState.SHOOTING:
+		currentTarget = shootingCameraTarget
+	else:
+		currentTarget = steeringCameraTarget
+		
+	if currentTarget:
+		global_transform = global_transform.interpolate_with(currentTarget.global_transform, 0.1)
 
