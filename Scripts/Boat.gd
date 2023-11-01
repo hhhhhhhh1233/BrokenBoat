@@ -2,7 +2,7 @@ extends RigidBody3D
 
 var planet
 var buoys
-#
+
 #@export var underWaterDrag = 3
 #@export var underWaterAngularDrag = 1
 #@export var airDrag = 1
@@ -11,6 +11,8 @@ var buoys
 @export var gravityPower = 30
 @export var planetRadius = 30
 @export var speed = 60
+
+var bullet = preload("res://Scenes/bullet.tscn")
 
 enum ShipState 
 {
@@ -45,6 +47,12 @@ func _physics_process(delta):
 	if shipState == ShipState.SHOOTING:
 		var turn_dir = Input.get_axis("turn_right", "turn_left")
 		$Cannon.global_rotate(planetNormal, turn_dir * delta)
+		if Input.is_action_just_pressed("action"):
+			var instance = bullet.instantiate()
+			add_child(instance)
+			instance.global_transform = $Cannon/BulletSpawn.global_transform
+			instance.apply_impulse(10 * $Cannon/BulletSpawn.global_transform.basis.z)
+			instance.reparent(get_node(".."))
 
 	for buoy in buoys:
 		# Gravity that tugs each floater point towards the gravitational center

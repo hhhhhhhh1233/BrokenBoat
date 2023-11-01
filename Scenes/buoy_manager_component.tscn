@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dtlicthdq7c3l"]
+
+[ext_resource type="Script" path="res://Scripts/BuoyManagerComponent.gd" id="1_q2crh"]
+
+[node name="BuoyManagerComponent" type="Node3D"]
+script = ExtResource("1_q2crh")

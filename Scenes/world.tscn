@@ -1,0 +1,342 @@
+[gd_scene load_steps=11 format=3 uid="uid://ctqjn8vw0rrtv"]
+
+[ext_resource type="Script" path="res://Scripts/PlayerCamera.gd" id="1_sifjy"]
+[ext_resource type="PackedScene" uid="uid://dtlicthdq7c3l" path="res://Scenes/buoy_manager_component.tscn" id="2_5v8jn"]
+[ext_resource type="PackedScene" uid="uid://clqi06tcqv00" path="res://Scenes/boat.tscn" id="3_6vajj"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ngjam"]
+radius = 30.0
+height = 60.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h0jcn"]
+albedo_color = Color(0.443137, 0.329412, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aoduy"]
+size = Vector3(4, 1, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mqxva"]
+albedo_color = Color(0, 0.894118, 0.227451, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4h1ua"]
+size = Vector3(4, 1, 4)
+
+[sub_resource type="SphereMesh" id="SphereMesh_sr27d"]
+radius = 3.0
+height = 6.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qdo70"]
+radius = 3.0
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.268407, 0.663741, -0.698144, -0.571727, 0.473529, 0.669999, 0.775297, 0.578981, 0.25238, 0, 0, 0)
+shadow_enabled = true
+
+[node name="PlayerCamera" type="Camera3D" parent="."]
+size = 30.0
+script = ExtResource("1_sifjy")
+
+[node name="Planet" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_ngjam")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_h0jcn")
+
+[node name="Features" type="Node3D" parent="."]
+
+[node name="RigidCube" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.49571, 32.8425, 0.964308)
+gravity_scale = 0.0
+linear_damp = 2.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Features/RigidCube"]
+mesh = SubResource("BoxMesh_aoduy")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="BuoyManagerComponent" parent="Features/RigidCube/MeshInstance3D" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("../..")
+buoys = [NodePath("floater"), NodePath("floater2"), NodePath("floater3"), NodePath("floater4")]
+
+[node name="floater" type="Node3D" parent="Features/RigidCube/MeshInstance3D/BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+
+[node name="floater2" type="Node3D" parent="Features/RigidCube/MeshInstance3D/BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+
+[node name="floater3" type="Node3D" parent="Features/RigidCube/MeshInstance3D/BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="floater4" type="Node3D" parent="Features/RigidCube/MeshInstance3D/BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidCube"]
+shape = SubResource("BoxShape3D_4h1ua")
+
+[node name="RigidSphere" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.0517, 33.4351, 4.15772)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere/BuoyManagerComponent"]
+
+[node name="RigidSphere2" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3527, 30.7833, 18.1449)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere2"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere2"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere2" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere2/BuoyManagerComponent"]
+
+[node name="RigidSphere3" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6854, 20.7272, 25.6438)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere3"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere3"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere3" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere3/BuoyManagerComponent"]
+
+[node name="RigidSphere4" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9912, 20.7272, 25.6438)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere4"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere4"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere4" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere4/BuoyManagerComponent"]
+
+[node name="RigidSphere5" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.9912, 20.7272, -26.7479)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere5"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere5"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere5" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere5/BuoyManagerComponent"]
+
+[node name="RigidSphere6" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.8442, 20.7272, -26.7479)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere6"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere6"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere6" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere6/BuoyManagerComponent"]
+
+[node name="RigidSphere7" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.8442, 1.21485, -34.8604)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere7"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere7"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere7" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere7/BuoyManagerComponent"]
+
+[node name="RigidSphere8" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.7346, 4.70906, -12.8743)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere8"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere8"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere8" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere8/BuoyManagerComponent"]
+
+[node name="RigidSphere9" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.7346, 4.70906, 12.0334)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere9"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere9"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere9" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere9/BuoyManagerComponent"]
+
+[node name="RigidSphere10" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.88811, -32.6152, 12.6643)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere10"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere10"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere10" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere10/BuoyManagerComponent"]
+
+[node name="RigidSphere11" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.0948, -2.71882, -6.415)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere11"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere11"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere11" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere11/BuoyManagerComponent"]
+
+[node name="RigidSphere12" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.3102, 3.45218, -20.6192)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere12"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere12"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere12" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere12/BuoyManagerComponent"]
+
+[node name="RigidSphere13" type="RigidBody3D" parent="Features"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.2305, -2.72406, -35.4413)
+gravity_scale = 0.0
+linear_damp = 1.0
+angular_damp = 5.0
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Features/RigidSphere13"]
+mesh = SubResource("SphereMesh_sr27d")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_mqxva")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Features/RigidSphere13"]
+shape = SubResource("SphereShape3D_qdo70")
+
+[node name="BuoyManagerComponent" parent="Features/RigidSphere13" node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_5v8jn")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D")]
+
+[node name="Node3D" type="Node3D" parent="Features/RigidSphere13/BuoyManagerComponent"]
+
+[node name="Boat" parent="." instance=ExtResource("3_6vajj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 31.6926, 0)
+mass = 10.0
+
+[node name="CameraTarget" type="Node3D" parent="Boat"]
+transform = Transform3D(-0.959585, 0.28142, -2.41474e-07, 0.174507, 0.595033, 0.784527, 0.220782, 0.75282, -0.620094, -0.467382, 11.58, -7.60499)
