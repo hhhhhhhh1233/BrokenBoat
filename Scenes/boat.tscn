@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://clqi06tcqv00"]
+[gd_scene load_steps=8 format=3 uid="uid://clqi06tcqv00"]
 
 [ext_resource type="Script" path="res://Scripts/Boat.gd" id="1_7w2cb"]
+[ext_resource type="PackedScene" uid="uid://dtlicthdq7c3l" path="res://Scenes/buoy_manager_component.tscn" id="2_0ex3f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qheah"]
 size = Vector3(2, 1, 3)
@@ -22,8 +23,6 @@ gravity_scale = 0.0
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_7w2cb")
-floatingPower = 150
-speed = 100
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_qheah")
@@ -31,20 +30,6 @@ shape = SubResource("BoxShape3D_qheah")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_lx8q8")
 surface_material_override/0 = SubResource("StandardMaterial3D_aoi60")
-
-[node name="Buoys" type="Node3D" parent="."]
-
-[node name="FrontLeftBuoy" type="Node3D" parent="Buoys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.5)
-
-[node name="FrontRightBuoy" type="Node3D" parent="Buoys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1.5)
-
-[node name="BackLeftBuoy" type="Node3D" parent="Buoys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1.5)
-
-[node name="BackRightBuoy" type="Node3D" parent="Buoys"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.5)
 
 [node name="Cannon" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -59,3 +44,24 @@ surface_material_override/0 = SubResource("StandardMaterial3D_5n2l0")
 
 [node name="CameraTarget" type="Node3D" parent="Cannon"]
 transform = Transform3D(-1, -1.73063e-15, -8.74228e-08, -3.06118e-08, 0.936691, 0.350158, 8.18881e-08, 0.350158, -0.936691, 0, 2.05252, -4.6124)
+
+[node name="BuoyManagerComponent" parent="." node_paths=PackedStringArray("rigidBody", "buoys") instance=ExtResource("2_0ex3f")]
+rigidBody = NodePath("..")
+buoys = [NodePath("Node3D"), NodePath("Node3D2"), NodePath("Node3D3"), NodePath("Node3D4")]
+gravityStrength = 90.0
+floatingStrength = 350.0
+airAngularDamp = 1.0
+waterLinearDamp = 1.0
+waterAngularDamp = 1.0
+
+[node name="Node3D" type="Node3D" parent="BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.5)
+
+[node name="Node3D2" type="Node3D" parent="BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1.5)
+
+[node name="Node3D3" type="Node3D" parent="BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1.5)
+
+[node name="Node3D4" type="Node3D" parent="BuoyManagerComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1.5)

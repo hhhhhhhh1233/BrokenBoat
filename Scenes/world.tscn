@@ -1,15 +1,23 @@
-[gd_scene load_steps=11 format=3 uid="uid://ctqjn8vw0rrtv"]
+[gd_scene load_steps=14 format=3 uid="uid://ctqjn8vw0rrtv"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerCamera.gd" id="1_sifjy"]
 [ext_resource type="PackedScene" uid="uid://dtlicthdq7c3l" path="res://Scenes/buoy_manager_component.tscn" id="2_5v8jn"]
+[ext_resource type="Shader" path="res://water.gdshader" id="2_cedjs"]
 [ext_resource type="PackedScene" uid="uid://clqi06tcqv00" path="res://Scenes/boat.tscn" id="3_6vajj"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_ngjam"]
 radius = 30.0
 height = 60.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h0jcn"]
-albedo_color = Color(0.443137, 0.329412, 1, 1)
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k1opo"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_k67ua"]
+noise = SubResource("FastNoiseLite_k1opo")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_we77g"]
+render_priority = 0
+shader = ExtResource("2_cedjs")
+shader_parameter/wave = SubResource("NoiseTexture2D_k67ua")
 
 [sub_resource type="BoxMesh" id="BoxMesh_aoduy"]
 size = Vector3(4, 1, 4)
@@ -40,7 +48,7 @@ script = ExtResource("1_sifjy")
 [node name="Planet" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_ngjam")
 skeleton = NodePath("")
-surface_material_override/0 = SubResource("StandardMaterial3D_h0jcn")
+surface_material_override/0 = SubResource("ShaderMaterial_we77g")
 
 [node name="Features" type="Node3D" parent="."]
 

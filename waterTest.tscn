@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlif3ysgorwkh"]
+
+[ext_resource type="Shader" path="res://water.gdshader" id="1_tlww8"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_6svoj"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jae7q"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_26y0f"]
+noise = SubResource("FastNoiseLite_jae7q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fir7b"]
+render_priority = 0
+shader = ExtResource("1_tlww8")
+shader_parameter/wave = SubResource("NoiseTexture2D_26y0f")
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+mesh = SubResource("SphereMesh_6svoj")
+surface_material_override/0 = SubResource("ShaderMaterial_fir7b")
